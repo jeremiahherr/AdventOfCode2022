@@ -5,7 +5,13 @@ import adventOfCode.utils.*;
 
 public class RockPaperScissorsPlayer 
 {
-    public static int playTournament(String strategy)
+    public enum StrategyDecryption
+    {
+        Mine,
+        Elfs
+    }
+
+    public static int playTournament(String strategy, StrategyDecryption decryption)
     {
         var totalScore = 0;
         var rounds = getStrategyRounds(strategy);
@@ -14,7 +20,7 @@ public class RockPaperScissorsPlayer
             var roundShapeCodes = getRoundShapeCodes(rounds[round]);
             var myShapeCode = roundShapeCodes[Players.Me.ordinal()];
             var opponentShapeCode = roundShapeCodes[Players.Opponent.ordinal()];
-            totalScore += getScore(myShapeCode, opponentShapeCode);
+            totalScore += getScore(myShapeCode, opponentShapeCode, decryption);
         }
         return totalScore;
     }
@@ -73,9 +79,9 @@ public class RockPaperScissorsPlayer
 
     private enum Outcome
     {
-        Win,
         Lose,
-        Draw
+        Draw,
+        Win
     }
 
     private static HashMap<Outcome, Integer> getOutcomeScoreKey()
@@ -85,6 +91,15 @@ public class RockPaperScissorsPlayer
         outcomeScoreKey.put(Outcome.Lose, 0);
         outcomeScoreKey.put(Outcome.Draw, 3);
         return outcomeScoreKey;
+    }
+
+    private static HashMap<String, Outcome> getMyOutcomeKey()
+    {
+        var myOutcomeKey = new HashMap<String, Outcome>();
+        myOutcomeKey.put("X", Outcome.Lose);
+        myOutcomeKey.put("Y", Outcome.Draw);
+        myOutcomeKey.put("Z", Outcome.Win);
+        return myOutcomeKey;
     }
 
     private static Outcome[][] getOutcomeMatrix()
@@ -103,11 +118,36 @@ public class RockPaperScissorsPlayer
         return outcomeMatrix;
     }
 
-    private static int getScore(String myShapeCode, String opponentShapeCode)
+    private static Shape[][] getMyShapeMatrix()
     {
-        var myShape = getMyShapeKey().get(myShapeCode);
+        var myShapeMatrix = new Shape[Shape.values().length][Outcome.values().length];
+        myShapeMatrix[Shape.Rock.ordinal()][Outcome.Lose.ordinal()] = Shape.Scissors;
+        myShapeMatrix[Shape.Rock.ordinal()][Outcome.Draw.ordinal()] = Shape.Rock;
+        myShapeMatrix[Shape.Rock.ordinal()][Outcome.Win.ordinal()] = Shape.Paper;
+        myShapeMatrix[Shape.Paper.ordinal()][Outcome.Lose.ordinal()] = Shape.Rock;
+        myShapeMatrix[Shape.Paper.ordinal()][Outcome.Draw.ordinal()] = Shape.Paper;
+        myShapeMatrix[Shape.Paper.ordinal()][Outcome.Win.ordinal()] = Shape.Scissors;
+        myShapeMatrix[Shape.Scissors.ordinal()][Outcome.Lose.ordinal()] = Shape.Paper;
+        myShapeMatrix[Shape.Scissors.ordinal()][Outcome.Draw.ordinal()] = Shape.Scissors;
+        myShapeMatrix[Shape.Scissors.ordinal()][Outcome.Win.ordinal()] = Shape.Rock;
+        return myShapeMatrix;
+    }
+
+    private static int getScore(String myActionCode, String opponentShapeCode, StrategyDecryption decryption)
+    {
+        Shape myShape;
+        Outcome outcome;
         var opponentShape = getOpponentShapeKey().get(opponentShapeCode);
-        var outcome = getOutcomeMatrix()[opponentShape.ordinal()][myShape.ordinal()];
+        if (decryption == StrategyDecryption.Mine)
+        {
+            myShape = getMyShapeKey().get(myActionCode);
+            outcome = getOutcomeMatrix()[opponentShape.ordinal()][myShape.ordinal()];
+        }
+        else
+        {
+            outcome = getMyOutcomeKey().get(myActionCode);
+            myShape = getMyShapeMatrix()[opponentShape.ordinal()][outcome.ordinal()];
+        }
         var score = getOutcomeScoreKey().get(outcome) + getShapeScoreKey().get(myShape);
         return score;
     }
@@ -117,7 +157,8 @@ public class RockPaperScissorsPlayer
         try
         {
             var input = TextReader.readFromFile(Settings.PROJECT_FOLDER + "day2/Strategy_MyPuzzle.txt");
-            System.out.println("Part 1 Answer: " + playTournament(input));
+            System.out.println("Part 1 Answer: " + playTournament(input, StrategyDecryption.Mine));
+            System.out.println("Part 2 Answer: " + playTournament(input, StrategyDecryption.Elfs));
         }
         catch (Exception e)
         {
