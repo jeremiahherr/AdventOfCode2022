@@ -1,6 +1,7 @@
 
 package adventOfCode.day3;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import adventOfCode.utils.*;
 
@@ -19,7 +20,10 @@ public class ElfRucksackReorganizer
     public static int getGroupBadgePrioritySum(String rucksacks)
     {
         var groupBadgePrioritySum = 0;
-        
+        for (var elfGroup : getElfGroups(rucksacks))
+        {
+            groupBadgePrioritySum += getItemPriority(getGroupBadge(elfGroup));
+        }
         return groupBadgePrioritySum;
     }
 
@@ -27,6 +31,23 @@ public class ElfRucksackReorganizer
     {
         var rucksacks = rucksacksList.split(Settings.NEW_LINE);
         return rucksacks;
+    }
+
+    private static ArrayList<String[]> getElfGroups(String rucksackList)
+    {
+        var elfGroups = new ArrayList<String[]>();
+        var rucksacks = getRucksacks(rucksackList);
+        var elfGroup = new String[3];
+        for (int rucksack = 0; rucksack < rucksacks.length; rucksack++)
+        {
+            elfGroup[rucksack % 3] = rucksacks[rucksack];
+            if (rucksack % 3 == 2) 
+            {
+                elfGroups.add(elfGroup);
+                elfGroup = new String[3];
+            }
+        }
+        return elfGroups;
     }
 
     private static String[] getRucksackCompartments(String rucksack)
@@ -46,6 +67,19 @@ public class ElfRucksackReorganizer
         {
             var currentItem = compartment1.charAt(item);
             if (compartment2.contains(String.valueOf(currentItem))) return currentItem;
+        }
+        return Character.MIN_VALUE;
+    }
+
+    private static char getGroupBadge(String[] elfGroup)
+    {
+        var elf1 = elfGroup[0];
+        var elf2 = elfGroup[1];
+        var elf3 = elfGroup[2];
+        for (int item = 0; item < elf1.length(); item++)
+        {
+            var currentItem = elf1.charAt(item);
+            if (elf2.contains(String.valueOf(currentItem)) && elf3.contains(String.valueOf(currentItem))) return currentItem;
         }
         return Character.MIN_VALUE;
     }
