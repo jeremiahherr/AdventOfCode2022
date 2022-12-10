@@ -20,8 +20,8 @@ public class RockPaperScissorsPlayer
         {
             var roundActionCodes = getRoundActionCodes(rounds[round]);
             var myActionCode = roundActionCodes[Players.Me.ordinal()];
-            var opponentShapeCode = roundActionCodes[Players.Opponent.ordinal()];
-            totalScore += getRoundScore(myActionCode, opponentShapeCode, decryption);
+            var opponentActionCode = roundActionCodes[Players.Opponent.ordinal()];
+            totalScore += getRoundScore(myActionCode, opponentActionCode, decryption);
         }
         return totalScore;
     }
@@ -34,8 +34,8 @@ public class RockPaperScissorsPlayer
 
     private static String[] getRoundActionCodes(String round)
     {
-        var roundShapeCodes = round.split(Settings.EMPTY_SPACE);
-        return roundShapeCodes;
+        var roundActionCodes = round.split(Settings.EMPTY_SPACE);
+        return roundActionCodes;
     }
 
     private enum Players
@@ -103,7 +103,7 @@ public class RockPaperScissorsPlayer
         return myOutcomeKey;
     }
 
-    private static Outcome[][] getOutcomeMatrix()
+    private static Outcome[][] getMyOutcomeMatrix()
     {
         var numberOfShapes = Shape.values().length;
         var outcomeMatrix = new Outcome[numberOfShapes][numberOfShapes];
@@ -134,22 +134,22 @@ public class RockPaperScissorsPlayer
         return myShapeMatrix;
     }
 
-    private static int getRoundScore(String myActionCode, String opponentShapeCode, StrategyDecryption decryption)
+    private static int getRoundScore(String myActionCode, String opponentActionCode, StrategyDecryption decryption)
     {
         Shape myShape;
-        Outcome outcome;
-        var opponentShape = getOpponentShapeKey().get(opponentShapeCode);
+        Outcome myOutcome;
+        var opponentShape = getOpponentShapeKey().get(opponentActionCode);
         if (decryption == StrategyDecryption.Mine)
         {
             myShape = getMyShapeKey().get(myActionCode);
-            outcome = getOutcomeMatrix()[opponentShape.ordinal()][myShape.ordinal()];
+            myOutcome = getMyOutcomeMatrix()[opponentShape.ordinal()][myShape.ordinal()];
         }
         else
         {
-            outcome = getMyOutcomeKey().get(myActionCode);
-            myShape = getMyShapeMatrix()[opponentShape.ordinal()][outcome.ordinal()];
+            myOutcome = getMyOutcomeKey().get(myActionCode);
+            myShape = getMyShapeMatrix()[opponentShape.ordinal()][myOutcome.ordinal()];
         }
-        var score = getOutcomeScoreKey().get(outcome) + getShapeScoreKey().get(myShape);
+        var score = getOutcomeScoreKey().get(myOutcome) + getShapeScoreKey().get(myShape);
         return score;
     }
 
