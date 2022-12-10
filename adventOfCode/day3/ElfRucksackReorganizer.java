@@ -6,7 +6,7 @@ import adventOfCode.utils.*;
 
 public class ElfRucksackReorganizer 
 {
-    public static int getRucksackPrioritySum(String rucksacks)
+    public static int getSharedCompartmentItemPrioritySum(String rucksacks)
     {
         var rucksackPrioritySum = 0;
         for (var rucksack : getRucksacks(rucksacks))
@@ -14,6 +14,13 @@ public class ElfRucksackReorganizer
             rucksackPrioritySum += getItemPriority(getItemSharedByBothRucksackCompartments(getRucksackCompartments(rucksack)));
         }
         return rucksackPrioritySum;
+    }
+    
+    public static int getGroupBadgePrioritySum(String rucksacks)
+    {
+        var groupBadgePrioritySum = 0;
+        
+        return groupBadgePrioritySum;
     }
 
     private static String[] getRucksacks(String rucksacksList)
@@ -111,7 +118,8 @@ public class ElfRucksackReorganizer
         try
         {
             var input = TextReader.readFromFile(Settings.PROJECT_FOLDER + "day3/ElfRucksacks_MyPuzzle.txt");
-            System.out.println("Part 1 Answer: " + getRucksackPrioritySum(input));
+            System.out.println("Part 1 Answer: " + getSharedCompartmentItemPrioritySum(input));
+            System.out.println("Part 2 Answer: " + getGroupBadgePrioritySum(input));
         }
         catch (Exception e)
         {
