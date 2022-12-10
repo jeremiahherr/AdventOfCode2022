@@ -1,11 +1,8 @@
 package adventOfCode.day2;
 
 import java.io.FileNotFoundException;
-
 import org.junit.*;
-
-import adventOfCode.utils.Settings;
-import adventOfCode.utils.TextReader;
+import adventOfCode.utils.*;
 
 public class RockPaperScissorsPlayerTests 
 {
