@@ -1,3 +1,4 @@
+
 package adventOfCode.day2;
 
 import java.util.HashMap;
@@ -17,10 +18,10 @@ public class RockPaperScissorsPlayer
         var rounds = getStrategyRounds(strategy);
         for (int round = 0; round < rounds.length; round++)
         {
-            var roundShapeCodes = getRoundShapeCodes(rounds[round]);
-            var myShapeCode = roundShapeCodes[Players.Me.ordinal()];
-            var opponentShapeCode = roundShapeCodes[Players.Opponent.ordinal()];
-            totalScore += getScore(myShapeCode, opponentShapeCode, decryption);
+            var roundActionCodes = getRoundActionCodes(rounds[round]);
+            var myActionCode = roundActionCodes[Players.Me.ordinal()];
+            var opponentShapeCode = roundActionCodes[Players.Opponent.ordinal()];
+            totalScore += getRoundScore(myActionCode, opponentShapeCode, decryption);
         }
         return totalScore;
     }
@@ -31,7 +32,7 @@ public class RockPaperScissorsPlayer
         return strategyRounds;
     }
 
-    private static String[] getRoundShapeCodes(String round)
+    private static String[] getRoundActionCodes(String round)
     {
         var roundShapeCodes = round.split(Settings.EMPTY_SPACE);
         return roundShapeCodes;
@@ -133,7 +134,7 @@ public class RockPaperScissorsPlayer
         return myShapeMatrix;
     }
 
-    private static int getScore(String myActionCode, String opponentShapeCode, StrategyDecryption decryption)
+    private static int getRoundScore(String myActionCode, String opponentShapeCode, StrategyDecryption decryption)
     {
         Shape myShape;
         Outcome outcome;

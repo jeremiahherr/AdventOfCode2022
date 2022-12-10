@@ -1,8 +1,8 @@
+
 package adventOfCode.day2;
 
 import java.io.FileNotFoundException;
 import org.junit.*;
-
 import adventOfCode.day2.RockPaperScissorsPlayer.StrategyDecryption;
 import adventOfCode.utils.*;
 
