@@ -49,8 +49,8 @@ public class ElfCalorieCounting
         try
         {
             var input = TextReader.readFromFile(Settings.PROJECT_FOLDER + "day1/ElfCalories_MyPuzzle.txt");
-            System.out.println("Part 1 Answer: " + ElfCalorieCounting.getSumOfTopNHighestElfCaloriesTotals(input, 1));
-            System.out.println("Part 2 Answer: " + ElfCalorieCounting.getSumOfTopNHighestElfCaloriesTotals(input, 3));
+            System.out.println("Part 1 Answer: " + getSumOfTopNHighestElfCaloriesTotals(input, 1));
+            System.out.println("Part 2 Answer: " + getSumOfTopNHighestElfCaloriesTotals(input, 3));
         }
         catch (Exception e)
         {
