@@ -3,7 +3,6 @@ package adventOfCode.day1;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
 import adventOfCode.utils.Settings;
 import adventOfCode.utils.TextReader;
 
@@ -12,7 +11,7 @@ public class ElfCalorieCounting
     public static int getSumOfTopNHighestElfCaloriesTotals(String caloriesList, int n)
     {
         var totalCaloriesByElf = getTotalCaloriesByElf(caloriesList);
-        Collections.sort(totalCaloriesByElf, Collections.reverseOrder());
+        Collections.sort(totalCaloriesByElf, Collections.reverseOrder()); // Sort in descending order
         int sumOfTopNHighestCalorieTotals = 0;
 
         if (n > totalCaloriesByElf.size()) n = totalCaloriesByElf.size();

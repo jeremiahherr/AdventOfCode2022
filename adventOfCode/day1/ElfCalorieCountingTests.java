@@ -2,7 +2,6 @@
 package adventOfCode.day1;
 
 import org.junit.*;
-
 import adventOfCode.utils.Settings;
 import adventOfCode.utils.TextReader;
 
