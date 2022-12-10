@@ -3,8 +3,7 @@ package adventOfCode.day1;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import adventOfCode.utils.Settings;
-import adventOfCode.utils.TextReader;
+import adventOfCode.utils.*;
 
 public class ElfCalorieCounting
 {
