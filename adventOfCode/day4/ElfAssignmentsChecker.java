@@ -6,7 +6,13 @@ import adventOfCode.utils.*;
 
 public class ElfAssignmentsChecker 
 {
-    public static int getNumberOfAssignmentPairsContainingTheOther(String elfAssignments)
+    public enum LevelOfOverLap
+    {
+        FULLY_CONTAINS_THE_OTHER,
+        PARTIALLY_CONTAINS_THE_OTHER
+    }
+
+    public static int getNumberOfAssignmentPairsContainingTheOther(String elfAssignments, LevelOfOverLap overlap)
     {
         var assignmentPairsContainingTheOther = 0;
         for (var assignmentPair : getAssignmentPairs(elfAssignments))
@@ -52,7 +58,8 @@ public class ElfAssignmentsChecker
         try
         {
             var input = TextReader.readFromFile(Settings.PROJECT_FOLDER + "day4/ElfCleaningAssignments_MyPuzzle.txt");
-            System.out.println("Part 1 Answer: " + getNumberOfAssignmentPairsContainingTheOther(input));
+            System.out.println("Part 1 Answer: " + getNumberOfAssignmentPairsContainingTheOther(input, LevelOfOverLap.FULLY_CONTAINS_THE_OTHER));
+            System.out.println("Part 2 Answer: " + getNumberOfAssignmentPairsContainingTheOther(input, LevelOfOverLap.PARTIALLY_CONTAINS_THE_OTHER));
         }
         catch (Exception e)
         {
