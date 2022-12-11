@@ -14,13 +14,18 @@ public class ElfAssignmentsChecker
 
     public static int getNumberOfAssignmentPairsContainingTheOther(String elfAssignments, LevelOfOverLap overlap)
     {
-        var assignmentPairsContainingTheOther = 0;
+        var assignmentPairsFullyContainingTheOther = 0;
+        var assignmentPairsPartiallyContainingTheOther = 0;
         for (var assignmentPair : getAssignmentPairs(elfAssignments))
         {
             if (anAssignemntFullyContainsTheOther(getAssignments(assignmentPair)))
-                assignmentPairsContainingTheOther++;
+                assignmentPairsFullyContainingTheOther++;
+
+            if (anAssignmentPartiallyContainsTheOther(getAssignments(assignmentPair))) 
+                assignmentPairsPartiallyContainingTheOther++;
         }
-        return assignmentPairsContainingTheOther;
+        if (overlap == LevelOfOverLap.FULLY_CONTAINS_THE_OTHER) return assignmentPairsFullyContainingTheOther;
+        else return assignmentPairsPartiallyContainingTheOther;
     }
 
     private static String[] getAssignmentPairs(String elfAssignmentsList)
@@ -51,6 +56,18 @@ public class ElfAssignmentsChecker
         var assignement1Sections = getSections(assignments[0]);
         var assignement2Sections = getSections(assignments[1]);
         return assignement1Sections.containsAll(assignement2Sections) || assignement2Sections.containsAll(assignement1Sections);
+    }
+
+    private static boolean anAssignmentPartiallyContainsTheOther(String[] assignments)
+    {
+        var assignement1Sections = getSections(assignments[0]);
+        var assignement2Sections = getSections(assignments[1]);
+        for (var section : assignement1Sections)
+        {
+            if (assignement2Sections.contains(section))
+                return true;
+        }
+        return false;
     }
 
     public static void main(String[] args)
