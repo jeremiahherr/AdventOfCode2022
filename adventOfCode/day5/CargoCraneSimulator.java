@@ -11,7 +11,7 @@ public class CargoCraneSimulator
     public static String getFinalCrateArrangement(String crateRearrangementInstructions)
     {
         var initialArrangementAndInstructions = separateInitialArrangementAndMoveInstructions(crateRearrangementInstructions);
-        var crateStacks = getInitialCrateArrangement(initialArrangementAndInstructions[0]); // not getting correct initial arrangement of stacks
+        var crateStacks = getInitialCrateArrangement(initialArrangementAndInstructions[0]);
         var moveInstructions = initialArrangementAndInstructions[1];
         for (var instructionLine : moveInstructions.split(Settings.NEW_LINE))
         {
