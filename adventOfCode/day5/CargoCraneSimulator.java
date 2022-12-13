@@ -8,14 +8,20 @@ import adventOfCode.utils.*;
 
 public class CargoCraneSimulator 
 {
-    public static String getFinalCrateArrangement(String crateRearrangementInstructions)
+    public enum CrateMovementType
+    {
+        SINGLE_CRATE,
+        MULTIPLE_CRATES
+    }
+
+    public static String getFinalCrateArrangement(String crateRearrangementInstructions, CrateMovementType crateMovementType)
     {
         var initialArrangementAndInstructions = separateInitialArrangementAndMoveInstructions(crateRearrangementInstructions);
         var crateStacks = getInitialCrateArrangement(initialArrangementAndInstructions[0]);
         var moveInstructions = initialArrangementAndInstructions[1];
         for (var instructionLine : moveInstructions.split(Settings.NEW_LINE))
         {
-            crateStacks = carryOutInstructionLine(instructionLine, crateStacks);
+            crateStacks = carryOutInstructionLine(instructionLine, crateStacks, crateMovementType);
         }
         return getCrateAtTopOfEachStack(crateStacks);
     }
@@ -69,7 +75,7 @@ public class CargoCraneSimulator
         return cratePositionInLineToStackIndexMap;
     }
 
-    private static ArrayList<Stack<String>> carryOutInstructionLine(String instructionLine, ArrayList<Stack<String>> crateStacks)
+    private static ArrayList<Stack<String>> carryOutInstructionLine(String instructionLine, ArrayList<Stack<String>> crateStacks, CrateMovementType crateMovementType)
     {
         String[] instruction = instructionLine.split(Settings.EMPTY_SPACE);
         int cratesToMove = Integer.parseInt(instruction[1]);
@@ -78,6 +84,7 @@ public class CargoCraneSimulator
 
         for (int crate = 0; crate < cratesToMove; crate++)
         {
+            // TODO: simulate moving multiple crates at once by putting the crates in a temporary stack before putting them in the destination stack
             crateStacks.get(toStack).push(crateStacks.get(fromStack).pop());
         }
         return crateStacks;
@@ -98,7 +105,8 @@ public class CargoCraneSimulator
         try
         {
             var input = TextReader.readFromFile(Settings.PROJECT_FOLDER + "day5/CrateRearrangementInstructions_MyPuzzle.txt");
-            System.out.println("Part 1 Answer: " + getFinalCrateArrangement(input));
+            System.out.println("Part 1 Answer: " + getFinalCrateArrangement(input, CrateMovementType.SINGLE_CRATE));
+            System.out.println("Part 2 Answer: " + getFinalCrateArrangement(input, CrateMovementType.MULTIPLE_CRATES));
         }
         catch (Exception e)
         {
