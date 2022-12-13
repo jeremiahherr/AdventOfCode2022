@@ -21,7 +21,7 @@ public class CargoCraneSimulator
         var moveInstructions = initialArrangementAndInstructions[1];
         for (var instructionLine : moveInstructions.split(Settings.NEW_LINE))
         {
-            crateStacks = carryOutInstructionLine(instructionLine, crateStacks, crateMovementType);
+            carryOutInstructionLine(instructionLine, crateStacks, crateMovementType);
         }
         return getCrateAtTopOfEachStack(crateStacks);
     }
@@ -75,19 +75,32 @@ public class CargoCraneSimulator
         return cratePositionInLineToStackIndexMap;
     }
 
-    private static ArrayList<Stack<String>> carryOutInstructionLine(String instructionLine, ArrayList<Stack<String>> crateStacks, CrateMovementType crateMovementType)
+    private static void carryOutInstructionLine(String instructionLine, ArrayList<Stack<String>> crateStacks, CrateMovementType crateMovementType)
     {
         String[] instruction = instructionLine.split(Settings.EMPTY_SPACE);
         int cratesToMove = Integer.parseInt(instruction[1]);
         int fromStack = Integer.parseInt(instruction[3])-1;
         int toStack = Integer.parseInt(instruction[5])-1;
 
+        if (crateMovementType == CrateMovementType.SINGLE_CRATE)
+        {
+            transferCratesBetweenStacks(crateStacks, fromStack, toStack, cratesToMove);
+        }
+        else
+        {
+            crateStacks.add(new Stack<String>()); // Add a new intermediate stack to simulate moving multiple crates at once
+            transferCratesBetweenStacks(crateStacks, fromStack, crateStacks.size()-1, cratesToMove);
+            transferCratesBetweenStacks(crateStacks, crateStacks.size()-1, toStack, cratesToMove);
+            crateStacks.remove(crateStacks.size()-1); // Remove the intermediate stack
+        }
+    }
+
+    private static void transferCratesBetweenStacks(ArrayList<Stack<String>> crateStacks, int fromStack, int toStack, int cratesToMove)
+    {
         for (int crate = 0; crate < cratesToMove; crate++)
         {
-            // TODO: simulate moving multiple crates at once by putting the crates in a temporary stack before putting them in the destination stack
             crateStacks.get(toStack).push(crateStacks.get(fromStack).pop());
         }
-        return crateStacks;
     }
 
     private static String getCrateAtTopOfEachStack(ArrayList<Stack<String>> crateStacks)
